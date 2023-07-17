@@ -1,12 +1,16 @@
+import { JSONFormat } from './JSONFormat';
+import { JSONStringFormat } from './JSONStringFormat';
 import { TextFormat } from './TextFormat';
 import { XMLFormat } from './XMLFormat';
 import { XMLStringFormat } from './XMLStringFormat';
 
 // Registered formats, maybe make this extensible in the future?
 const formats = [
+    JSONFormat,
+    JSONStringFormat,
     TextFormat,
     XMLFormat,
-    XMLStringFormat,
+    XMLStringFormat
 ] as const;
 
 /**
@@ -29,4 +33,4 @@ export function autoDetectFormat(data: unknown): typeof formats[number] | null
 }
 
 export type { IBitmapFontRawData } from './TextFormat';
-export { TextFormat, XMLFormat, XMLStringFormat };
+export { JSONFormat, JSONStringFormat, TextFormat, XMLFormat, XMLStringFormat };

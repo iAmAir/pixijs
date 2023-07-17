@@ -1,13 +1,12 @@
 import { copySearchParams, LoaderParserPriority } from '@pixi/assets';
 import { extensions, ExtensionType, settings, utils } from '@pixi/core';
 import { BitmapFont } from './BitmapFont';
-import { TextFormat, XMLStringFormat } from './formats';
+import { autoDetectFormat, JSONStringFormat, TextFormat, XMLStringFormat } from './formats';
 
 import type { Loader, LoaderParser, ResolvedAsset } from '@pixi/assets';
 import type { Texture } from '@pixi/core';
-import type { BitmapFontData } from './BitmapFontData';
 
-const validExtensions = ['.xml', '.fnt'];
+const validExtensions = ['.xml', '.fnt', '.json'];
 
 /** simple loader plugin for loading in bitmap fonts! */
 export const loadBitmapFont = {
@@ -25,14 +24,19 @@ export const loadBitmapFont = {
 
     async testParse(data: string): Promise<boolean>
     {
-        return TextFormat.test(data) || XMLStringFormat.test(data);
+        return TextFormat.test(data) || XMLStringFormat.test(data) || JSONStringFormat.test(data);
     },
 
     async parse(asset: string, data: ResolvedAsset, loader: Loader): Promise<BitmapFont>
     {
-        const fontData: BitmapFontData = TextFormat.test(asset)
-            ? TextFormat.parse(asset)
-            : XMLStringFormat.parse(asset);
+        const format = autoDetectFormat(asset);
+
+        if (!format)
+        {
+            throw new Error('Unrecognized data format for font.');
+        }
+
+        const fontData = format.parse(data as any);
 
         const { src } = data;
         const { page: pages } = fontData;
