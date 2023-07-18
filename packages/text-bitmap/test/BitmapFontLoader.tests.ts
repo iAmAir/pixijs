@@ -153,6 +153,55 @@ describe('BitmapFontLoader', () =>
         expect(charUndefined).toBeUndefined();
     });
 
+    it('should properly register bitmap font based on json data', async () =>
+    {
+        const font = await loader.load<BitmapFont>(`${serverPath}json-font.json`);
+
+        expect(font).toBeObject();
+        expect(font).toHaveProperty('chars');
+
+        const charA = font.chars['A'.charCodeAt(0)];
+        const charATexture = charA.texture as Texture<ImageResource>;
+
+        expect(charA).toBeDefined();
+        expect(charATexture.baseTexture.resource.src).toEqual(`${serverPath}json-font.png`);
+        expect(charATexture.frame.x).toEqual(0.5);
+        expect(charATexture.frame.y).toEqual(737.5);
+        expect(charATexture.frame.width).toEqual(116);
+        expect(charATexture.frame.height).toEqual(132);
+
+        const charB = font.chars['B'.charCodeAt(0)];
+        const charBTexture = charB.texture as Texture<ImageResource>;
+
+        expect(charB).toBeDefined();
+        expect(charBTexture.baseTexture.resource.src).toEqual(`${serverPath}json-font.png`);
+        expect(charBTexture.frame.x).toEqual(794.5);
+        expect(charBTexture.frame.y).toEqual(604.5);
+        expect(charBTexture.frame.width).toEqual(91);
+        expect(charBTexture.frame.height).toEqual(132);
+        const charC = font.chars['C'.charCodeAt(0)];
+        const charCTexture = charC.texture as Texture<ImageResource>;
+
+        expect(charC).toBeDefined();
+        expect(charCTexture.baseTexture.resource.src).toEqual(`${serverPath}json-font.png`);
+        expect(charCTexture.frame.x).toEqual(162.5);
+        expect(charCTexture.frame.y).toEqual(333.5);
+        expect(charCTexture.frame.width).toEqual(102);
+        expect(charCTexture.frame.height).toEqual(135);
+        const charD = font.chars['D'.charCodeAt(0)];
+        const charDTexture = charD.texture as Texture<ImageResource>;
+
+        expect(charD).toBeDefined();
+        expect(charDTexture.baseTexture.resource.src).toEqual(`${serverPath}json-font.png`);
+        expect(charDTexture.frame.x).toEqual(587.5);
+        expect(charDTexture.frame.y).toEqual(604.5);
+        expect(charDTexture.frame.width).toEqual(96);
+        expect(charDTexture.frame.height).toEqual(132);
+        const charUndefined = font.chars['£'.charCodeAt(0)];
+
+        expect(charUndefined).toBeUndefined();
+    });
+
     it('should properly register bitmap font based on text format', async () =>
     {
         const font = await loader.load<BitmapFont>(`${serverPath}font-text.fnt`);

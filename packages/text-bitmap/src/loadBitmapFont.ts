@@ -1,7 +1,7 @@
 import { copySearchParams, LoaderParserPriority } from '@pixi/assets';
 import { extensions, ExtensionType, settings, utils } from '@pixi/core';
 import { BitmapFont } from './BitmapFont';
-import { autoDetectFormat, JSONStringFormat, TextFormat, XMLStringFormat } from './formats';
+import { autoDetectParse, JSONStringFormat, TextFormat, XMLStringFormat } from './formats';
 
 import type { Loader, LoaderParser, ResolvedAsset } from '@pixi/assets';
 import type { Texture } from '@pixi/core';
@@ -29,14 +29,12 @@ export const loadBitmapFont = {
 
     async parse(asset: string, data: ResolvedAsset, loader: Loader): Promise<BitmapFont>
     {
-        const format = autoDetectFormat(asset);
+        const fontData = autoDetectParse(asset);
 
-        if (!format)
+        if (!fontData)
         {
             throw new Error('Unrecognized data format for font.');
         }
-
-        const fontData = format.parse(data as any);
 
         const { src } = data;
         const { page: pages } = fontData;
